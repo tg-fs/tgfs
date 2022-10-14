@@ -2,17 +2,17 @@ import sys
 import sqlite3
 
 
-def add_tag_to_file(tag_name, list_of_files):
+def add_tag_to_file(tag_name, list_of_files: list[str]):
     print("add tag to file function")
 
 
-def create_tag(tag_name):
+def create_tag(tag_name: str):
     print("created tag to file function")
 
-def remove_tag_from_file(tag_name, list_of_files):
+def remove_tag_from_file(tag_name: str, list_of_files: list[str]):
     print("removed tag to file function")
 
-def delete_tag(tag_name):
+def delete_tag(tag_name: str):
     print("delete tag")
 
 
