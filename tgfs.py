@@ -2,6 +2,7 @@
 
 import sys
 import sqlite3
+import os
 
 
 def check_if_init(cursor: sqlite3.Cursor):
@@ -29,9 +30,12 @@ def abort_if_no_init(cursor: sqlite3.Cursor):
         sys.exit()
 
 
-def add_tag_to_file(_tag_name, _list_of_files: list[str]):
+def add_tag_to_file(cursor: sqlite3.Cursor, tag_name: str, list_of_files: list[str]):
     """"Add a tag to a list of files"""
-    print("add tag to file function")
+
+    for file in list_of_files:
+        add_query = f"INSERT INTO file_list VALUES('{os.path.abspath(file)}', '{tag_name}')"
+        cursor.execute(add_query)
 
 
 def create_tag(cursor: sqlite3.Cursor, tag_name: str):
@@ -84,6 +88,13 @@ def init_db(cursor: sqlite3.Cursor):
         print("Database initialized")
 
 
+def list_files_from_tag(cursor: sqlite3.Cursor, tag_name: str):
+    fetch_files_query = f"SELECT * FROM file_list WHERE tag_name = '{tag_name}'"
+    files = cursor.execute(fetch_files_query)
+    for file in files:
+        print(file[0])
+
+
 def main():
     """The entrypoint"""
 
@@ -97,7 +108,7 @@ def main():
 
     subcommand = sys.argv[1]
     if subcommand == "add":
-        add_tag_to_file(sys.argv[2],sys.argv[3:])
+        add_tag_to_file(cursor, sys.argv[2],sys.argv[3:])
     elif subcommand == "create":
         create_tag(cursor, sys.argv[2])
     elif subcommand == "remove":
@@ -108,6 +119,8 @@ def main():
         init_db(cursor)
     elif subcommand == "tags":
         show_tags(cursor)
+    elif subcommand == 'ls':
+        list_files_from_tag(cursor, sys.argv[2])
     else:
         print("Incorrect command format")
 
