@@ -89,6 +89,7 @@ def init_db(cursor: sqlite3.Cursor):
 
 
 def list_files_from_tag(cursor: sqlite3.Cursor, tag_name: str):
+    """Shows all files with a given tag"""
     fetch_files_query = f"SELECT * FROM file_list WHERE tag_name = '{tag_name}'"
     files = cursor.execute(fetch_files_query)
     for file in files:
