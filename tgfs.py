@@ -4,22 +4,22 @@ import sys
 import sqlite3
 
 
-def add_tag_to_file(tag_name, list_of_files: list[str]):
+def add_tag_to_file(_tag_name, _list_of_files: list[str]):
     """"Add a tag to a list of files"""
     print("add tag to file function")
 
 
-def create_tag(tag_name: str):
+def create_tag(_tag_name: str):
     """Create a new tag"""
     print("created tag to file function")
 
 
-def remove_tag_from_file(tag_name: str, list_of_files: list[str]):
+def remove_tag_from_file(_tag_name: str, _list_of_files: list[str]):
     """"Remove a tag from list of files"""
     print("removed tag to file function")
 
 
-def delete_tag(tag_name: str):
+def delete_tag(_tag_name: str):
     """"Delete a tag"""
     print("delete tag")
 
