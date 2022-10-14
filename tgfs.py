@@ -32,6 +32,7 @@ def abort_if_no_init(cursor: sqlite3.Cursor):
 
 def add_tag_to_file(cursor: sqlite3.Cursor, tag_name: str, list_of_files: list[str]):
     """"Add a tag to a list of files"""
+    abort_if_no_init(cursor)
 
     for file in list_of_files:
         add_query = f"INSERT INTO file_list VALUES('{os.path.abspath(file)}', '{tag_name}')"
