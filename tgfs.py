@@ -71,9 +71,14 @@ WHERE tag_name = '{tag_name}' AND file_name = '{os.path.abspath(file)}'
 """
         cursor.execute(remove_query)
 
-def delete_tag(_tag_name: str):
+def delete_tag(cursor: sqlite3.Cursor, list_of_tags: list[str]):
     """"Delete a tag"""
-    print("delete tag")
+    abort_if_no_init(cursor)
+
+    # handle incorrect tag name
+    for tag in list_of_tags:
+        delete_tag_query = f"DELETE FROM tags WHERE name = '{tag}'"
+        cursor.execute(delete_tag_query)
 
 
 def init_db(cursor: sqlite3.Cursor):
@@ -125,7 +130,7 @@ def main():
     elif subcommand == "remove":
         remove_tag_from_file(cursor, sys.argv[2],sys.argv[3:])
     elif subcommand == "delete":
-        delete_tag(sys.argv[2])
+        delete_tag(cursor, sys.argv[2:])
     elif subcommand == "init":
         init_db(cursor)
     elif subcommand == "tags":
