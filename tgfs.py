@@ -37,6 +37,7 @@ def add_tag_to_file(cursor: sqlite3.Cursor, tag_name: str, list_of_files: list[s
     for file in list_of_files:
         add_query = f"INSERT INTO file_list VALUES('{os.path.abspath(file)}', '{tag_name}')"
         cursor.execute(add_query)
+        # handle situation where same tag is added again
 
 
 def create_tag(cursor: sqlite3.Cursor, tag_name: str):
@@ -57,9 +58,13 @@ def show_tags(cursor: sqlite3.Cursor):
         print(tag[0]) # first element of row only
 
 
-def remove_tag_from_file(_tag_name: str, _list_of_files: list[str]):
+def remove_tag_from_file(cursor: sqlite3.Cursor, tag_name: str, list_of_files: list[str]):
     """"Remove a tag from list of files"""
-    print("removed tag to file function")
+    abort_if_no_init(cursor)
+
+    for file in list_of_files:
+        remove_query = f"DELETE FROM file_list WHERE tag_name = '{tag_name}' AND file_name = '{os.path.abspath(file)}'"
+        cursor.execute(remove_query)
 
 
 def delete_tag(_tag_name: str):
@@ -114,7 +119,7 @@ def main():
     elif subcommand == "create":
         create_tag(cursor, sys.argv[2])
     elif subcommand == "remove":
-        remove_tag_from_file( sys.argv[2],sys.argv[3:])
+        remove_tag_from_file(cursor, sys.argv[2],sys.argv[3:])
     elif subcommand == "delete":
         delete_tag(sys.argv[2])
     elif subcommand == "init":
