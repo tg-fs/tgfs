@@ -62,10 +62,14 @@ def remove_tag_from_file(cursor: sqlite3.Cursor, tag_name: str, list_of_files: l
     """"Remove a tag from list of files"""
     abort_if_no_init(cursor)
 
-    for file in list_of_files:
-        remove_query = f"DELETE FROM file_list WHERE tag_name = '{tag_name}' AND file_name = '{os.path.abspath(file)}'"
-        cursor.execute(remove_query)
+    # handle incorrect tag name
 
+    for file in list_of_files:
+        remove_query = f"""
+        DELETE FROM file_list
+WHERE tag_name = '{tag_name}' AND file_name = '{os.path.abspath(file)}'
+"""
+        cursor.execute(remove_query)
 
 def delete_tag(_tag_name: str):
     """"Delete a tag"""
