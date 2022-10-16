@@ -114,7 +114,7 @@ def list_files_from_tag(cursor: sqlite3.Cursor, tag_name: str):
 def main():
     """The entrypoint"""
 
-    sqlite_connection = sqlite3.connect('.tgfs.db')
+    sqlite_connection = sqlite3.connect(os.getenv("TGFS_DATABASE_PATH", os.path.expanduser("~/.tgfs.db")))
 
     if len(sys.argv) < 2:
         print("Not enough arguments")
