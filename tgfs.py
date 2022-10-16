@@ -111,6 +111,27 @@ def list_files_from_tag(cursor: sqlite3.Cursor, tag_name: str):
         print(file[0])
 
 
+def edit_tag(cursor: sqlite3.Cursor, old_tag_name: str, new_tag_name: str):
+
+    cursor.execute("SELECT count(*) FROM tags WHERE name = ?", (new_tag_name,))
+    data = cursor.fetchone()[0]
+    if not data == 0:
+        print(f"Tag with name {new_tag_name} alread exists")
+        sys.exit(32)
+
+    update_tag_name_query = f"""UPDATE tags
+SET name = "{new_tag_name}"
+WHERE name = "{old_tag_name}";
+"""
+    print(update_tag_name_query)
+    cursor.execute(update_tag_name_query)
+
+    update_file_tags_query = f"""UPDATE file_list
+SET tag_name = "{new_tag_name}"
+WHERE tag_name = "{old_tag_name}";
+    """
+    cursor.execute(update_file_tags_query)
+
 def main():
     """The entrypoint"""
 
@@ -137,6 +158,8 @@ def main():
         show_tags(cursor)
     elif subcommand == 'ls':
         list_files_from_tag(cursor, sys.argv[2])
+    elif subcommand == "edit":
+        edit_tag(cursor, sys.argv[2], sys.argv[3])
     else:
         print("Incorrect command format")
 
