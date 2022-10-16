@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """"Tag Based File System"""
 
 import sys
