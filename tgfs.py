@@ -105,6 +105,8 @@ def init_db(cursor: sqlite3.Cursor):
 
 def list_files_from_tag(cursor: sqlite3.Cursor, tag_name: str):
     """Shows all files with a given tag"""
+    abort_if_no_init(cursor)
+
     fetch_files_query = f"SELECT * FROM file_list WHERE tag_name = '{tag_name}'"
     files = cursor.execute(fetch_files_query)
     for file in files:
@@ -112,6 +114,8 @@ def list_files_from_tag(cursor: sqlite3.Cursor, tag_name: str):
 
 
 def edit_tag(cursor: sqlite3.Cursor, old_tag_name: str, new_tag_name: str):
+    """Edit tag name"""
+    abort_if_no_init(cursor)
 
     cursor.execute("SELECT count(*) FROM tags WHERE name = ?", (new_tag_name,))
     data = cursor.fetchone()[0]
@@ -135,7 +139,9 @@ WHERE tag_name = "{old_tag_name}";
 def main():
     """The entrypoint"""
 
-    sqlite_connection = sqlite3.connect(os.getenv("TGFS_DATABASE_PATH", os.path.expanduser("~/.tgfs.db")))
+    sqlite_connection = sqlite3.connect(
+        os.getenv("TGFS_DATABASE_PATH",
+        os.path.expanduser("~/.tgfs.db")))
 
     if len(sys.argv) < 2:
         print("Not enough arguments")
